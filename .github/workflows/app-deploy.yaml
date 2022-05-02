@@ -8,7 +8,7 @@ on :
 
 jobs:
   build_test:
-    name: build and Test
+    - name: build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
       run : |
         echo "FUNCTION_APP_PATH=${{github.workspace}}/api" >> $GITHUB_ENV
 
-    - name: 'Check environment vairables'
+    - name: Check environment vairables
      shell : bash
      run : |
         echo $FUNCTION_APP_PATH
@@ -51,3 +51,9 @@ jobs:
         pushd "${{env.FUNCTION_APP_PATH}}"
         dotnet publish . -c Release -o published
         popd
+
+    - name: Upload Function App artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: apiapp
+        path: ${{env.FUNCTION_APP_PATH}}/published
