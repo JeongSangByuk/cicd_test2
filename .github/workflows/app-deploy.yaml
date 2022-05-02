@@ -17,7 +17,7 @@ jobs:
       run : |
         echo "FUNCTION_APP_PATH=${{github.workspace}}/api" >> $GITHUB_ENV
 
-    - name :'Check environment vairables'
+    - name: 'Check environment vairables'
      shell : bash
      run : |
         echo $FUNCTION_APP_PATH
