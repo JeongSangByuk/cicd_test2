@@ -8,8 +8,8 @@ on :
 
 jobs:
   build_test:
-    name: 'Build and Test'
-    runs-on:ubuntu-latest
+    name: build and Test
+    runs-on: ubuntu-latest
 
     steps:
     - name: Set environment variables
@@ -21,3 +21,33 @@ jobs:
      shell : bash
      run : |
         echo $FUNCTION_APP_PATH
+
+    - name : Checkout the repo
+      uses: actions/checkout@v2
+    
+    - name : Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.x'
+
+    - name : Restore Nuget packages
+      shell : bash
+      run : |
+        dotnet restore .
+    
+    - name : Build Function App
+      shell : bash
+      run : |
+        dotnet build .
+
+    - name : Test Function App
+      shell : bash
+      run : |
+        dotnet test . -c Release
+
+    - name: create Function App artifact
+      shell : bash
+      run : |
+        pushd "${{env.FUNCTION_APP_PATH}}"
+        dotnet publish . -c Release -o published
+        popd
